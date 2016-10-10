@@ -1,5 +1,10 @@
 extends layout
 
 block content
-  h1= title
-  p Welcome to #{title}
+  .wrap
+    h1= title
+    p Welcome to #{title}
+    - for (var i = 1; i < 30; ++i) {
+      include includes/singer-plate
+    - }
+
