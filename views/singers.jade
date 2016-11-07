@@ -1,0 +1,25 @@
+//
+   Created by Lich on 03.11.2016.
+extends layout
+
+block scripts
+  script(src='/js/main.js')
+block content
+  .wrap
+    h1= title
+    - for (var i = 0; i < singers.length; ++i) {
+    div
+      label Id:
+        input(value="#{singers[i]._id}")
+      label Имя:
+        input(value="#{singers[i].name}")
+      label Описание:
+        input(value="#{singers[i].description}")
+      button.delete-singer(value="#{singers[i]._id}") Удалить
+    - }
+
+    p Welcome to #{title}
+    form#newSingerForm(method="POST", action="/api/singers")
+      input(name="name")
+      input(name="description")
+      button(type="submit") send
