@@ -23,3 +23,6 @@ block content
       input(name="name")
       input(name="description")
       button(type="submit") send
+    form#img(method="POST", enctype="multipart/form-data", action="/api/singers/upload")
+      input(type="file" name="file")
+      button(type="submit") Submit

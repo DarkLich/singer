@@ -6,11 +6,17 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+
+var passport = require('./libs/passport_settings')
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var api = require('./routes/api');
+var users = require('./routes/api/users');
 var singers = require('./routes/api/singers');
+var login = require('./routes/auth/login');
+var logout = require('./routes/auth/logout');
 
 var app = express();
 
@@ -24,6 +30,13 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+//todo Почитать про secret
+app.use(session({
+  secret: 'super secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }
+}));
 app.use(require('node-sass-middleware')({
   src: path.join(__dirname, 'public'),
   dest: path.join(__dirname, 'public'),
@@ -32,9 +45,15 @@ app.use(require('node-sass-middleware')({
 }));
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/', routes);
-app.use('/users', users);
+//app.use('/users', users);
 app.use('/api', api);
+app.use('/login', login);
+app.use('/logout', logout);
+app.use('/users', users);
 app.use('/singers', singers);
 
 // catch 404 and forward to error handler

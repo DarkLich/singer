@@ -1,0 +1,31 @@
+//
+   Created by Lich on 03.11.2016.
+extends layout
+
+block scripts
+  script(src='/js/main.js')
+block content
+  .wrap
+    h1= title
+    - for (var i = 0; i < users.length; ++i) {
+    div
+      label Id:
+        input(value="#{users[i]._id}")
+      label Имя:
+        input(value="#{users[i].name}")
+      label Email:
+        input(value="#{users[i].email}")
+      label Password:
+        input(value="#{users[i].password}")
+      button.delete-user(value="#{users[i]._id}") Удалить
+    - }
+
+    p Welcome to #{title}
+    form#newUserForm(method="POST", action="/api/users")
+      input(name="name")
+      input(name="email")
+      input(name="password")
+      button(type="submit") send
+    form#img(method="POST", enctype="multipart/form-data", action="/api/users/upload")
+      input(type="file" name="file")
+      button(type="submit") Submit

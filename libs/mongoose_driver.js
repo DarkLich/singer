@@ -3,6 +3,7 @@
  */
 var mongoose = require('mongoose');
 
+var users = require('../models/users');
 var singers = require('../models/singers');
 var songs = require('../models/songs');
 
@@ -16,6 +17,7 @@ db.once('open', function callback () {
     console.log("Connected to DB!");
 });
 
+module.exports.Users = users;
 module.exports.Singers = singers;
 module.exports.Songs = songs;
 

@@ -1,0 +1,16 @@
+//
+   Created by Lich on 03.11.2016.
+extends layout
+
+block scripts
+  script(src='/js/main.js')
+block content
+  .wrap
+    h4 Login to your account
+    form(action='/login' method='post')
+      fieldset
+        label(for='email') Email
+        input(type='text' name='email' placeholder='Your Email')
+        label(for='password') Password
+        input(type='password' name='password' placeholder='Your Password')
+        button(type='Login') Login

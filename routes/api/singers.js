@@ -4,6 +4,7 @@
 var path = require('path');
 var express = require('express');
 var mongoose = require(path.join(global.root_path, 'libs/mongoose_driver'));
+var image_saver = require(path.join(global.root_path, 'libs/image_saver'));
 
 var router = express.Router();
 
@@ -49,6 +50,10 @@ router.delete('/:id', function (req, res){
     return mongoose.Singers.api.delete(req.params.id).then(function(result){
         return res.send({ status: 'OK', singers: result });
     });
+});
+router.post('/upload', image_saver, function(req, res){
+
+    return res.send({ status: 'OK' });
 });
 
 module.exports = router;

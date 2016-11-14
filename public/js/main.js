@@ -24,7 +24,31 @@ $(document).ready(function(){
                 window.location.reload();
             }
         });
-
     });
+
+    $(document).on("click", ".delete-user", function(ev) {
+        $.ajax({
+            url: `/api/users/${$(ev.currentTarget).val()}`,
+            method: "DELETE",
+            complete: function(e) {
+                console.log(e);
+                window.location.reload();
+            }
+        });
+    });
+
+    $(document).on("submit", "#newUserForm", function(ev) {
+        ev.preventDefault();
+        $.ajax({
+            url: $(ev.currentTarget).attr('action'),
+            method: $(ev.currentTarget).attr('method'),
+            data: $(ev.currentTarget).serialize(),
+            complete: function(e) {
+                console.log(e);
+                window.location.reload();
+            }
+        });
+    });
+
 
 });

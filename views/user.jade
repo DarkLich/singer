@@ -1,0 +1,15 @@
+//
+   Created by Lich on 03.11.2016.
+extends layout
+
+block scripts
+  script(src='/js/main.js')
+block content
+  .wrap
+    h1= title
+    p Welcome to #{title}
+    form(method="POST", action="users")
+      input(name="name")
+      input(name="email")
+      input(name="password")
+      button(type="submit") send
