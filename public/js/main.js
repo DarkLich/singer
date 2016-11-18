@@ -50,5 +50,28 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on("click", ".video-button", function(ev) {
+        ev.preventDefault();
+        $.ajax({
+            url: `/a`,
+            method: "GET",
+            dataType: 'html',
+            data: {},
+            complete: function(e, data, d) {
+                console.log(e, data, d);
+                if (e.responseText) {
+                    $(".vieo-container").append(e.responseText);
+                }
+
+            },
+            done: function(e, data, d) {
+                console.log(e, data, d);
+                $(".vieo-container").append();
+            },
+        });
+    });
+
+
+
 
 });
