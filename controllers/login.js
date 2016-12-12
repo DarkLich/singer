@@ -8,15 +8,12 @@ module.exports.login = function(req, res, next) {
     passport.authenticate('local',
         function(err, user, info) {
             console.log(';;;;;;;;;', err, user, info);
-            return err
-                ? next(err)
-                : user
-                ? req.logIn(user, function(err) {
-                return err
-                    ? next(err)
-                    : res.redirect('/users');
-            })
-                : res.redirect('/');
+            return err ? next(err)
+                        : user ? req.logIn(user, function(err) {
+                                    return err ? next(err)
+                                                : next();
+                                })
+                                : res.redirect('/');
         }
     )(req, res, next);
 };

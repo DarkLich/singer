@@ -2,15 +2,17 @@
  * Created by Lich on 13.11.2016.
  */
 var mongoose = require('mongoose');
+var uniqueValidator  = require('mongoose-unique-validator');
 
 var Schema = mongoose.Schema;
 
 var Users = new Schema({
     name: { type: String, required: true },
-    email: { type: String, unique: true, required: true },
+    email: { type: String, unique: true, required: true, uniqueCaseInsensitive: true},
     password: { type: String, required: true },
     modified: { type: Date, default: Date.now }
 });
+Users.plugin(uniqueValidator, {message: "This `{PATH}` is already registered"});
 
 var mUsers = mongoose.model('Users', Users);
 
@@ -18,7 +20,7 @@ var mUsers = mongoose.model('Users', Users);
 Users.path('name').validate(function (v) {
     console.log ('sssssssss', v)
     return v.length > 2 && v.length < 70;
-});
+}, "Length of `{PATH}` must be between 2 and 70");
 
 var api = {
     findAll: function() {
@@ -40,13 +42,14 @@ var api = {
             newUser.save(function (err) {
                 if (!err) {
                     console.log("users created");
-                    resolve({status: 'OK', users: newUser});
+                    resolve({succes: true, users: newUser});
                 } else {
-                    console.log(err);
+                    console.log('+++++++', err);
                     if (err.name == 'ValidationError') {
-                        reject({error: 'Validation error'});
-                    } else {
-                        reject({error: 'Server error'});
+                        errors = _.map(err.errors, (val) => {return {path: val.path, message: val.message}})
+                        reject({succes: false, errors: errors, err: 'Validation error'});
+                    } else if (err.name == 'MongoError' && err.code == 11000) {
+                        reject({succes: false, errors: err, err: 'Server error'});
                     }
                     console.log('Internal error(%d): %s', err.message);
                 }

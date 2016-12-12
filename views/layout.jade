@@ -6,17 +6,24 @@ html
     link(rel='stylesheet', href='/libs/bootstrap-3.3.7-dist/css/bootstrap.css')
     link(rel='stylesheet', href='/libs/bootstrap-3.3.7-dist/css/bootstrap-theme.css')
 
+    script(src='/libs/lodash.js')
     script(src='/libs/jquery-3.1.1.js')
     script(src='/libs/bootstrap-3.3.7-dist/js/bootstrap.js')
-    block scripts
+    block heads
   body
     block header
       nav.navbar.navbar-default
         .container-fluid
           .navbar-header
-            a.navbar-brand(href="#") Спiваночки.com
-            a.navbar-brand(href="singers") Спiваки
-            a.navbar-brand(href="login") Login
-            a.navbar-brand(href="logout") Out
+            a.navbar-brand(href="/") Спiваночки.com
+          .collapse.navbar-collapse
+            a.navbar-brand(href="/singers") Спiваки
+            if (isAuthenticated)
+              a.navbar-brand.navbar-right(href="/users/profile") Profile
+              a.navbar-brand.navbar-right(href="/logout") Out
+            if (!isAuthenticated)
+              a.navbar-brand.navbar-right(href="/login") Login
+              a.navbar-brand.navbar-right(href="/registration") Registration
+
 
     block content

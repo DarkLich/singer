@@ -2,12 +2,13 @@
    Created by Lich on 03.11.2016.
 extends layout
 
-block scripts
+block heads
   script(src='/js/main.js')
 block content
   .wrap
     h1= title
     p Welcome to #{title}
+    - console.log(user)
     form(method="POST", action="users")
       input(name="name")
       input(name="email")

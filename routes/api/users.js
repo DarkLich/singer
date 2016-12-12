@@ -9,7 +9,7 @@ var mustAuthenticatedMw = require(path.join(global.root_path, 'libs/must-authent
 
 var router = express.Router();
 
-router.get('/', mustAuthenticatedMw, function(req, res) {
+router.get('/', function(req, res) {
     //return res.render('user', { title: 'Express' });
     return mongoose.Users.api.findAll().then(function(users){
         res.locals.users = users;
@@ -30,16 +30,27 @@ router.post('/', function(req, res) {
 
 });
 
-router.get('/:id', function(req, res) {
-    return mongoose.Users.api.findById(req.params.id).then(function(result){
-        return res.send({ status: 'OK', users: result });
-    });
+//router.get('/:id', mustAuthenticatedMw, function(req, res) {
+//    return mongoose.Users.api.findById(req.params.id).then(function(result){
+//        return res.send({ status: 'OK', users: result });
+//    });
+//});
+
+router.get('/profile', function(req, res) {
+    console.log('========', req.session);
+    if (req.session.passport) {
+        return mongoose.Users.api.findById(req.session.passport.user).then(function(result){
+            return res.render('user_profile', {user: result});
+        });
+    } else {
+        return res.redirect('/');
+    }
 });
 
 router.put('/:id', function (req, res){
     var user = {
         name: req.body.name,
-        description: req.body.description,
+        description: req.body.description
     };
     return mongoose.Users.api.update(req.params.id, user).then(function(result){
         return res.send({ status: 'OK', users: result });

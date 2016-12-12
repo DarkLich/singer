@@ -1,4 +1,5 @@
 global.root_path = __dirname;
+global._ = require('lodash');
 
 var express = require('express');
 var path = require('path');
@@ -11,10 +12,10 @@ var session = require('express-session');
 var passport = require('./libs/passport_settings')
 
 var routes = require('./routes/index');
-var users = require('./routes/users');
 var api = require('./routes/api');
 var users = require('./routes/api/users');
 var singers = require('./routes/api/singers');
+var registration = require('./routes/auth/registration');
 var login = require('./routes/auth/login');
 var logout = require('./routes/auth/logout');
 
@@ -48,9 +49,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.all('*', function(req,res,next) {
+  res.locals.isAuthenticated = req.isAuthenticated();
+  next();
+});
+
 app.use('/', routes);
 //app.use('/users', users);
 app.use('/api', api);
+app.use('/registration', registration);
 app.use('/login', login);
 app.use('/logout', logout);
 app.use('/users', users);
