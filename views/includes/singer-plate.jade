@@ -1,6 +1,6 @@
 .plate
   .photo
-    img.main-photo(src="images/hqdefault(#{i}).jpg")
+    img.main-photo(src=users[i].photo ? users[i].photo : "images/photo_placeholder.png")
   .title
-    .name Robert Deppe - Guitar/vocals
-    .from Montréal, Canada
+    .name= users[i].accountName || "a"
+    .from= users[i].email || "v"

@@ -51,7 +51,7 @@ router.delete('/:id', function (req, res){
         return res.send({ status: 'OK', singers: result });
     });
 });
-router.post('/upload', image_saver, function(req, res){
+router.post('/upload', image_saver.upload, function(req, res){
 
     return res.send({ status: 'OK' });
 });

@@ -2,13 +2,16 @@ extends layout
 block heads
   script(src='/js/main.js')
 block content
-  .wrap
-    h1= title
-    p Welcome to #{title}
-    .btn.btn-primary.video-button dfdfdfdf
-    .vieo-container
-    .photos
-      - for (var i = 1; i < 30; ++i) {
-        include includes/singer-plate
+  .wrap.container
+    //h1= title
+    //p Welcome to #{title}
+    //.btn.btn-primary.video-button dfdfdfdf
+    //.vieo-container
+    .users-list
+      - console.log('7777777777', users)
+      - if (users) {
+        - for (var i = 0; i < users.length; i++) {
+          include includes/singer-plate
+        - }
       - }
 

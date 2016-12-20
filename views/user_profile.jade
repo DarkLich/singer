@@ -4,13 +4,62 @@ extends layout
 
 block heads
   script(src='/js/main.js')
+
 block content
-  .wrap
-    h1= title
-    p Welcome to #{title}
-    - console.log(user)
-    form(method="POST", action="users")
-      input(name="name")
-      input(name="email")
-      input(name="password")
-      button(type="submit") send
+  .nav-container.container
+    .col-sm-12(role="navigation")
+      ul.nav.nav-tabs(role="tablist")
+        li.active(role="presentation")
+          a(href="#user_info" aria-controls="user" role="tab" data-toggle="tab") User
+        li(role="presentation")
+          a(href="#singer_info" aria-controls="singer" role="tab" data-toggle="tab") Singer
+        li(role="presentation")
+          a(href="#messages_info" aria-controls="messages" role="tab" data-toggle="tab") Messages
+  .wrap.container
+    //h1= title
+    - console.log("ggggggggggggggg", user)
+    .tab-content
+      #user_info.tab-pane.active(role="tabpanel")
+        form#user_profile_form(method="PUT", action="/users/#{user._id}")
+          fieldset.col-sm-6
+            .form-group
+              input.form-control(type='text' name='accountName' placeholder='Name' autocomplete="off" value="#{user.accountName || ''}")
+            .form-group
+              input.form-control(type='text' name='email' placeholder='Email' autocomplete="off" value="#{user.email || ''}")
+            .form-group
+              input.form-control(type='text' name='firstName' placeholder='firstName' autocomplete="off" value="#{user.firstName || ''}")
+            .form-group
+              input.form-control(type='text' name='middleName' placeholder='middleName' autocomplete="off" value="#{user.middleName || ''}")
+            .form-group
+              input.form-control(type='text' name='secondName' placeholder='secondName' autocomplete="off" value="#{user.secondName || ''}")
+          fieldset.col-sm-6
+            .form-group
+                img.img-responsive.user-photo(src=user && user.photo ? "/" + user.photo : "/images/photo_placeholder.png")
+            .form-group
+              input.user-photo-uploader(type='file' name='photo' title='Select photo' data-filename-placement="inside")
+          fieldset.col-sm-12
+            .form-group.col-sm-offset-4.col-sm-4
+              button.btn.btn-lg.btn-primary.btn-block(type="submit") Save
+      #singer_info.tab-pane(role="tabpanel")
+        form#singer_profile_form(method="PUT", action="/users/#{user._id}")
+          - if (!singer) {singer = {}}
+          fieldset.col-sm-6
+            input(type='hidden' name='user_id' autocomplete="off" value="#{user._id || ''}")
+            .form-group
+              input.form-control(type='text' name='name' placeholder='Name' autocomplete="off" value="#{singer.name || ''}")
+            .form-group
+              input.form-control(type='text' name='genre' placeholder='Genre' autocomplete="off" value="#{singer.genre || ''}")
+            .form-group
+              input.form-control(type='text' name='role' placeholder='Role' autocomplete="off" value="#{singer.role || ''}")
+          fieldset.col-sm-6
+            .form-group
+              img.img-responsive.singer-photo(src=singer && singer.photo ? "/" + singer.photo : "/images/photo_placeholder.png")
+            .form-group
+              input.singer-photo-uploader(type='file' name='photo' title='Select photo' data-filename-placement="inside")
+          fieldset.col-sm-12
+            .form-group.col-sm-offset-4.col-sm-4
+              button.btn.btn-lg.btn-primary.btn-block(type="submit") Save
+
+
+      #messages_info.tab-pane(role="tabpanel")
+        .cccc messages

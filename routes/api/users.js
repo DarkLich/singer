@@ -4,7 +4,7 @@
 var path = require('path');
 var express = require('express');
 var mongoose = require(path.join(global.root_path, 'libs/mongoose_driver'));
-//var image_saver = require(path.join(global.root_path, 'libs/image_saver'));
+var image_saver = require(path.join(global.root_path, 'libs/image_saver'));
 var mustAuthenticatedMw = require(path.join(global.root_path, 'libs/must-authenticated')).mustAuthenticatedMw;
 
 var router = express.Router();
@@ -40,7 +40,28 @@ router.get('/profile', function(req, res) {
     console.log('========', req.session);
     if (req.session.passport) {
         return mongoose.Users.api.findById(req.session.passport.user).then(function(result){
-            return res.render('user_profile', {user: result});
+            if (result.status == "OK") {
+                return res.render('user_profile', {user: result.Users});
+            } else {
+                res.send({ success: false, message: "user not found" });
+            }
+        });
+    } else {
+        return res.redirect('/');
+    }
+});
+
+router.post('/upload', image_saver.upload, function(req, res) {
+    console.log('adadadadadadad', req.file)
+    console.log('adadadadadadad111', req.session.passport.user)
+    if (req.session.passport) {
+        return mongoose.Users.api.update(req.session.passport.user, {photo: `${req.file.destination}/${req.file.filename}`}).then(function(result){
+            console.log('jjjjjjjjj', result)
+            if (result.status == "OK") {
+                return res.json({ success: true, path: result.Users.photo});
+            } else {
+                res.send({ success: false, message: "user not found" });
+            }
         });
     } else {
         return res.redirect('/');
@@ -48,10 +69,8 @@ router.get('/profile', function(req, res) {
 });
 
 router.put('/:id', function (req, res){
-    var user = {
-        name: req.body.name,
-        description: req.body.description
-    };
+    console.log('buuuuuuuuuuuuu', req.body);
+    var user = req.body;
     return mongoose.Users.api.update(req.params.id, user).then(function(result){
         return res.send({ status: 'OK', users: result });
     });

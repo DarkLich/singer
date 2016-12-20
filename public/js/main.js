@@ -71,7 +71,86 @@ $(document).ready(function(){
         });
     });
 
+    $(document).on("submit", "#user_profile_form", function(ev) {
+        ev.preventDefault();
+        $.ajax({
+            url: $(ev.currentTarget).attr('action'),
+            method: $(ev.currentTarget).attr('method'),
+            data: $(ev.currentTarget).serialize(),
+            complete: function(e) {
+                console.log('bbbbbbbbbbbbbb', e);
+            }
+        });
+    });
 
+    $('.user-photo-uploader').change(function(e){
+        var formData = new FormData();
+        console.log('}}}}}}}', $(e.currentTarget)[0].files[0])
+        formData.append("file", $(e.currentTarget)[0].files[0]);
+        $.ajax({
+            url: '/api/users/upload',  //Server script to process data
+            type: 'POST',
+            //xhr: function() {  // Custom XMLHttpRequest
+            //    var myXhr = $.ajaxSettings.xhr();
+            //    if(myXhr.upload){ // Check if upload property exists
+            //        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+            //    }
+            //    return myXhr;
+            //},
+            //Ajax events
+            //beforeSend: beforeSendHandler,
+            //success: completeHandler,
+            //error: errorHandler,
+            success: function(res) {
+                if (res.success) {
+                    $(".user-photo").attr("src", Globals.rootUrl + res.path)
+                }
+                console.log('2222', res)
+            },
+            // Form data
+            data: formData,
 
+            //Options to tell jQuery not to process data or worry about content-type.
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+    $('.singer-photo-uploader').change(function(e){
+        var formData = new FormData();
+        console.log('}}}}}}}', $(e.currentTarget)[0].files[0])
+        formData.append("file", $(e.currentTarget)[0].files[0]);
+        $.ajax({
+            url: '/api/users/upload',  //Server script to process data
+            type: 'POST',
+            //xhr: function() {  // Custom XMLHttpRequest
+            //    var myXhr = $.ajaxSettings.xhr();
+            //    if(myXhr.upload){ // Check if upload property exists
+            //        myXhr.upload.addEventListener('progress',progressHandlingFunction, false); // For handling the progress of the upload
+            //    }
+            //    return myXhr;
+            //},
+            //Ajax events
+            //beforeSend: beforeSendHandler,
+            //success: completeHandler,
+            //error: errorHandler,
+            success: function(res) {
+                if (res.success) {
+                    $(".user-photo").attr("src", Globals.rootUrl + res.path)
+                }
+                console.log('2222', res)
+            },
+            // Form data
+            data: formData,
+
+            //Options to tell jQuery not to process data or worry about content-type.
+            cache: false,
+            contentType: false,
+            processData: false
+        });
+    });
+
+    //$('.nav-tabs a').tab('show')
 
 });

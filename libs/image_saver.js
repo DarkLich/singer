@@ -8,9 +8,11 @@ var multer  = require('multer');
 
 var storage = multer.diskStorage({
     destination: function (req, file, cb) {
+        //console.log('mmmmmmmmmmm', req)
         cb(null, 'uploads')
     },
     filename: function (req, file, cb) {
+        //console.log(';;;;;;;;;;;', req);
         var match = file.originalname.match(/\.(\w+)$/);
         cb(null, file.fieldname + '-' + Date.now() + '.' + match[1])
     }
@@ -27,8 +29,10 @@ var fileFilter = function (req, file, cb) {
 
 var limits = {fileSize: 10000000};
 
-var a = function (req, res, next) {
-    upload = multer({storage: storage, fileFilter: fileFilter, limits: limits});
+var upload = function (req, res, next) {
+    console.log('bbbbbbbbbbbbbbbbbb', req.files)
+    var upload = multer({storage: storage, fileFilter: fileFilter, limits: limits});
+    console.log('zzzzzzzzzzzz')
     upload.single('file')(req,res,next)
     //console.log('ooooooooooo', req)
     //var tempPath = req.files.file.path,
@@ -46,4 +50,10 @@ var a = function (req, res, next) {
     //}
     //// ...
 };
-module.exports = a;
+
+var getFileDir = function () {
+    return "/uploads/";
+}
+
+module.exports.upload = upload;
+module.exports.getFileDir = getFileDir;

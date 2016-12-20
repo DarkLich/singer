@@ -7,9 +7,13 @@ var uniqueValidator  = require('mongoose-unique-validator');
 var Schema = mongoose.Schema;
 
 var Users = new Schema({
-    name: { type: String, required: true },
+    accountName: { type: String, required: true },
     email: { type: String, unique: true, required: true, uniqueCaseInsensitive: true},
     password: { type: String, required: true },
+    firstName: { type: String },
+    secondName: { type: String },
+    middleName: { type: String },
+    photo: {type: String},
     modified: { type: Date, default: Date.now }
 });
 Users.plugin(uniqueValidator, {message: "This `{PATH}` is already registered"});
@@ -17,7 +21,7 @@ Users.plugin(uniqueValidator, {message: "This `{PATH}` is already registered"});
 var mUsers = mongoose.model('Users', Users);
 
 // validation
-Users.path('name').validate(function (v) {
+Users.path('accountName').validate(function (v) {
     console.log ('sssssssss', v)
     return v.length > 2 && v.length < 70;
 }, "Length of `{PATH}` must be between 2 and 70");
@@ -74,23 +78,25 @@ var api = {
     },
     update: function(id, user) {
         return new Promise(function(resolve, reject) {
-            mUsers.findById(req.params.id, function (err, users) {
+            mUsers.findById(id, function (err, users) {
                 if(!users) {
                     return reject({ error: 'Not found' });
                 }
 
-                users.name = user.name;
-                users.description =user.description;
+                Object.assign(users, user);
+                console.log('nmmmmnnnnnnn', users)
+                console.log('zztttttttttttt', id, user)
                 return users.save(function (err) {
                     if (!err) {
                         console.log("users updated");
-                        resolve({ status: 'OK', users: users });
+                        resolve({ status: 'OK', Users: users });
                     } else {
                         if(err.name == 'ValidationError') {
                             reject({ error: 'Validation error' });
                         } else {
                             reject({ error: 'Server error' });
                         }
+                        console.log(err.message);
                         console.log('Internal error(%d): %s',err.message);
                     }
                 });
